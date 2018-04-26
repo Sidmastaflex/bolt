@@ -12,10 +12,10 @@ void customer()
 {
 	create("customer"); //make this a process
 	f->use(exponential(0.5)); //obtain needed amount of service
-	
+
 }
 
-extern "C" void sim() 
+extern "C" void sim()
 {
 	create("sim"); //make this a process
 	f = new facility("JOE"); //create the service center - f
