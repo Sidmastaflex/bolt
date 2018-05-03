@@ -8,18 +8,39 @@
 # hlsearch on (H) or off (h):
 ~H
 # Last Search Pattern:
-~MSle0~/seed
+~MSle0~/uniform
 
 # Command Line History (newest to oldest):
 :wq
-:seed
-:set rnu
-:Ew
+:Wq
+:1
+:x
+:q
+:70
+:161
+:159
+:41
+:75
 :set nu
-:set nopaste
+:29
+:163
+:set rnu
+:65
 :set paste
+:seed
+:Ew
+:set nopaste
 
 # Search String History (newest to oldest):
+?/uniform
+?/i < T
+?/termnl
+?/on_termnl
+?/o3n_termnl
+?// from the airport terminal building going to the Hertz rental car lot.
+?// Simulation of the Hertz airport shuttle bus, which picks up passengers
+?/station->
+?/f = new
 ?/seed
 ?/rand
 ?/nesrand\
@@ -31,7 +52,11 @@
 # Input Line History (newest to oldest):
 
 # Registers:
-""1	LINE	0
+"1	LINE	0
+		int T = strtol(argv[1], NULL, 10);
+		int S = strtol(argv[2], NULL, 10);
+		int M = strtol(argv[3], NULL, 10);
+"2	LINE	0
 	/*
 	 SIMULATE               ; Define model
 	 *
@@ -55,38 +80,76 @@
 	       START     1            ; Start one run
 	       END                    ; End model
 	*/
-"2	LINE	0
-	#include <iostream>
 "3	LINE	0
 	#include <iostream>
 "4	LINE	0
+	#include <iostream>
+"5	LINE	0
 	void customer()
 	{
 		create("customer"); //make this a process
 		f->use(exponential(0.5)); //obtain needed amount of service
 	}
-"-	CHAR	0
-	/
+""-	CHAR	0
+	0
 
 # File marks:
-'0  39  8  ~/CS177/lab_3/861285156_task2.cpp
-'1  21  11  ~/CS177/lab_3/861285156_task2.cpp
-'2  44  12  ~/CS177/lab_3/861285156_task2.cpp
-'3  40  0  ~/CS177/lab_3/861285156_task2.cpp
-'4  37  0  ~/CS177/lab_3/861285156_task2.cpp
-'5  64  50  ~/CS177/lab_3/861285156_task2.cpp
-'6  1  0  ~/CS177/lab_3/861285156_task2.cpp
-'7  52  0  ~/CS177/lab_3/861285156_task2.cpp
-'8  28  26  ~/CS177/lab_3/861285156_task2.cpp
-'9  51  0  ~/CS177/lab_3/861285156_task2.cpp
+'0  1  29  ~/CS177/lab_4/lab4.cpp
+'1  37  22  ~/CS177/lab_4/lab4.cpp
+'2  39  4  ~/CS177/lab_4/lab4.cpp
+'3  159  15  ~/CS177/lab_4/lab4.cpp
+'4  185  1  ~/CS177/lab_4/lab4.cpp
+'5  40  40  ~/CS177/lab_4/lab4.cpp
+'6  75  19  ~/CS177/lab_4/lab4.cpp
+'7  161  50  ~/CS177/lab_4/lab4.cpp
+'8  44  9  ~/CS177/lab_4/lab4.cpp
+'9  86  0  ~/CS177/lab_4/lab4.cpp
 
 # Jumplist (newest first):
--'  39  8  ~/CS177/lab_3/861285156_task2.cpp
+-'  1  29  ~/CS177/lab_4/lab4.cpp
+-'  23  28  ~/CS177/lab_4/lab4.cpp
+-'  37  1  ~/CS177/lab_4/lab4.cpp
+-'  39  1  ~/CS177/lab_4/lab4.cpp
+-'  159  3  ~/CS177/lab_4/lab4.cpp
+-'  185  1  ~/CS177/lab_4/lab4.cpp
+-'  40  1  ~/CS177/lab_4/lab4.cpp
+-'  75  1  ~/CS177/lab_4/lab4.cpp
+-'  161  5  ~/CS177/lab_4/lab4.cpp
+-'  44  1  ~/CS177/lab_4/lab4.cpp
+-'  86  1  ~/CS177/lab_4/lab4.cpp
+-'  45  1  ~/CS177/lab_4/lab4.cpp
+-'  167  3  ~/CS177/lab_4/lab4.cpp
+-'  76  9  ~/CS177/lab_4/lab4.cpp
+-'  73  15  ~/CS177/lab_4/lab4.cpp
+-'  162  3  ~/CS177/lab_4/lab4.cpp
+-'  29  0  ~/CS177/lab_4/lab4.cpp
+-'  15  0  ~/CS177/lab_4/lab4.cpp
+-'  70  1  ~/CS177/lab_4/lab4.cpp
+-'  22  6  ~/CS177/lab_4/lab4.cpp
+-'  20  0  ~/CS177/lab_4/lab4.cpp
+-'  21  6  ~/CS177/lab_4/lab4.cpp
+-'  163  4  ~/CS177/lab_4/lab4.cpp
+-'  59  2  ~/CS177/lab_4/lab4.cpp
+-'  41  1  ~/CS177/lab_4/lab4.cpp
+-'  28  0  ~/CS177/lab_4/lab4.cpp
+-'  42  1  ~/CS177/lab_4/lab4.cpp
+-'  114  0  ~/CS177/lab_4/lab4.cpp
+-'  69  7  ~/CS177/lab_4/lab4.cpp
+-'  35  0  ~/CS177/lab_4/lab4.cpp
+-'  2  0  ~/CS177/lab_4/lab4.cpp
+-'  86  0  ~/CS177/lab_3/861285156_task2.cpp
+-'  30  0  ~/CS177/lab_3/861285156_task2.cpp
 -'  21  1  ~/CS177/lab_3/861285156_task2.cpp
+-'  68  1  ~/CS177/lab_3/861285156_task2.cpp
+-'  71  1  ~/CS177/lab_3/861285156_task2.cpp
+-'  79  2  ~/CS177/lab_3/861285156_task2.cpp
+-'  64  0  ~/CS177/lab_3/861285156_task2.cpp
+-'  67  1  ~/CS177/lab_3/861285156_task2.cpp
+-'  74  2  ~/CS177/lab_3/861285156_task2.cpp
+-'  39  1  ~/CS177/lab_3/861285156_task2.cpp
 -'  44  1  ~/CS177/lab_3/861285156_task2.cpp
 -'  40  0  ~/CS177/lab_3/861285156_task2.cpp
 -'  37  0  ~/CS177/lab_3/861285156_task2.cpp
--'  64  1  ~/CS177/lab_3/861285156_task2.cpp
 -'  52  0  ~/CS177/lab_3/861285156_task2.cpp
 -'  1  0  ~/CS177/lab_3/861285156_task2.cpp
 -'  28  0  ~/CS177/lab_3/861285156_task2.cpp
@@ -100,11 +163,9 @@
 -'  12  0  ~/CS177/lab_3/861285156_task2.cpp
 -'  62  0  ~/CS177/lab_3/861285156_task2.cpp
 -'  5  0  ~/CS177/lab_3/861285156_task2.cpp
--'  71  1  ~/CS177/lab_3/861285156_task2.cpp
--'  67  2  ~/CS177/lab_3/861285156_task2.cpp
+-'  72  1  ~/CS177/lab_3/861285156_task2.cpp
 -'  55  1  ~/CS177/lab_3/861285156_task2.cpp
 -'  69  2  ~/CS177/lab_3/861285156_task2.cpp
--'  70  4  ~/CS177/lab_3/861285156_task2.cpp
 -'  63  1  ~/CS177/lab_3/861285156_task2.cpp
 -'  21  1  ~/CS177/lab_3/861285156_task1.cpp
 -'  26  2  ~/CS177/lab_3/861285156_task1.cpp
@@ -123,7 +184,6 @@
 -'  4  0  ~/CS177/lab_3/861285156_task2.cpp
 -'  66  2  ~/CS177/lab_3/861285156_task2.cpp
 -'  54  1  ~/CS177/lab_3/861285156_task2.cpp
--'  68  2  ~/CS177/lab_3/861285156_task2.cpp
 -'  21  1  ~/CS177/lab_3/861285156_task1.cpp
 -'  26  2  ~/CS177/lab_3/861285156_task1.cpp
 -'  1  123  ~/CS177/lab_3/861285156_task1.cpp
@@ -143,68 +203,118 @@
 -'  20  1  ~/CS177/lab_3/861285156_task2.cpp
 -'  56  4  ~/CS177/lab_3/861285156_task2.cpp
 -'  17  13  ~/CS177/lab_3/861285156_task2.cpp
--'  21  1  ~/CS177/lab_3/861285156_task1.cpp
--'  26  2  ~/CS177/lab_3/861285156_task1.cpp
--'  1  123  ~/CS177/lab_3/861285156_task1.cpp
--'  17  0  ~/CS177/lab_3/861285156_task1.cpp
--'  23  2  ~/CS177/lab_3/861285156_task1.cpp
--'  32  0  ~/CS177/lab_3/861285156_task1.cpp
--'  15  23  ~/CS177/lab_3/861285156_task1.cpp
--'  5  0  ~/CS177/lab_3/861285156_task1.cpp
--'  2  0  ~/CS177/lab_3/861285156_task1.cpp
--'  29  1  ~/CS177/lab_3/861285156_task1.cpp
--'  29  30  ~/CS177/lab_3/861285156_task2.cpp
--'  24  22  ~/CS177/lab_3/861285156_task2.cpp
--'  26  0  ~/CS177/lab_3/861285156_task2.cpp
--'  19  1  ~/CS177/lab_3/861285156_task2.cpp
--'  21  1  ~/CS177/lab_3/861285156_task1.cpp
--'  26  2  ~/CS177/lab_3/861285156_task1.cpp
--'  1  123  ~/CS177/lab_3/861285156_task1.cpp
--'  17  0  ~/CS177/lab_3/861285156_task1.cpp
--'  23  2  ~/CS177/lab_3/861285156_task1.cpp
--'  32  0  ~/CS177/lab_3/861285156_task1.cpp
--'  15  23  ~/CS177/lab_3/861285156_task1.cpp
--'  5  0  ~/CS177/lab_3/861285156_task1.cpp
--'  31  0  ~/CS177/lab_3/861285156_task2.cpp
--'  2  0  ~/CS177/lab_3/861285156_task1.cpp
--'  29  1  ~/CS177/lab_3/861285156_task1.cpp
--'  58  2  ~/CS177/lab_3/861285156_task2.cpp
--'  2  0  ~/CS177/lab_3/861285156_task1.cpp
--'  29  1  ~/CS177/lab_3/861285156_task1.cpp
--'  2  0  ~/CS177/lab_3/861285156_task1.cpp
--'  29  1  ~/CS177/lab_3/861285156_task1.cpp
--'  2  0  ~/CS177/lab_3/861285156_task1.cpp
--'  29  1  ~/CS177/lab_3/861285156_task1.cpp
--'  42  0  ~/CS177/lab_3/861285156_task2.cpp
--'  41  0  ~/CS177/lab_3/861285156_task2.cpp
 
 # History of marks within files (newest to oldest):
 
+> ~/CS177/lab_4/lab4.cpp
+	"	1	29
+	^	23	29
+	.	23	29
+	+	3	0
+	+	2	70
+	+	40	0
+	+	40	15
+	+	42	0
+	+	15	37
+	+	35	32
+	+	69	8
+	+	66	18
+	+	42	0
+	+	42	24
+	+	42	10
+	+	51	18
+	+	60	12
+	+	69	8
+	+	6	18
+	+	69	19
+	+	69	60
+	+	75	7
+	+	69	1
+	+	70	0
+	+	69	24
+	+	70	11
+	+	75	12
+	+	81	16
+	+	90	12
+	+	81	16
+	+	161	34
+	+	159	12
+	+	161	35
+	+	163	15
+	+	166	23
+	+	42	8
+	+	42	9
+	+	42	35
+	+	42	7
+	+	42	8
+	+	42	0
+	+	42	34
+	+	42	2
+	+	42	8
+	+	42	39
+	+	42	0
+	+	42	8
+	+	42	21
+	+	42	21
+	+	28	18
+	+	15	20
+	+	42	35
+	+	41	0
+	+	40	39
+	+	42	0
+	+	41	0
+	+	37	0
+	+	163	13
+	+	70	46
+	+	15	14
+	+	29	18
+	+	161	37
+	+	37	21
+	+	38	21
+	+	39	21
+	+	69	5
+	+	70	8
+	+	75	8
+	+	40	9
+	+	15	22
+	+	70	9
+	+	75	9
+	+	161	39
+	+	40	91
+	+	40	41
+	+	159	27
+	+	160	3
+	+	161	4
+	+	162	3
+	+	163	4
+	+	164	4
+	+	165	4
+	+	166	4
+	+	167	5
+	+	168	3
+	+	159	30
+	+	41	0
+	+	70	17
+	+	75	17
+	+	111	13
+	+	32	17
+	+	44	9
+	+	161	50
+	+	70	2
+	+	75	19
+	+	40	40
+	+	37	25
+	+	159	15
+	+	37	4
+	+	38	4
+	+	39	4
+	+	37	26
+	+	23	29
+
 > ~/CS177/lab_3/861285156_task2.cpp
-	"	39	8
-	^	21	12
-	.	21	12
-	+	10	16
-	+	14	10
-	+	14	0
-	+	52	7
-	+	54	11
-	+	55	20
-	+	63	85
-	+	14	40
-	+	14	32
-	+	55	23
-	+	62	0
-	+	55	23
-	+	62	1
-	+	68	17
-	+	63	37
-	+	55	7
-	+	71	0
-	+	70	21
-	+	71	3
-	+	52	0
-	+	64	59
+	"	86	0
+	^	86	0
+	.	63	27
 	+	67	8
 	+	14	32
 	+	63	2
@@ -213,11 +323,11 @@
 	+	55	8
 	+	64	60
 	+	67	9
-	+	70	5
-	+	71	1
-	+	70	18
-	+	71	2
-	+	71	1
+	+	71	5
+	+	72	1
+	+	71	18
+	+	72	2
+	+	72	1
 	+	2	0
 	+	5	0
 	+	6	0
@@ -284,6 +394,27 @@
 	+	39	24
 	+	44	12
 	+	21	12
+	+	68	43
+	+	69	0
+	+	68	43
+	+	24	36
+	+	71	27
+	+	69	38
+	+	71	25
+	+	79	22
+	+	71	24
+	+	58	37
+	+	68	1
+	+	63	11
+	+	74	15
+	+	75	10
+	+	77	10
+	+	74	95
+	+	68	2
+	+	21	22
+	+	10	36
+	+	72	29
+	+	63	27
 
 > ~/CS177/lab_3/861285156_task1.cpp
 	"	2	0
