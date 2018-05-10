@@ -1,6 +1,8 @@
 #include <iostream>
 #include "cpp.h"
 #include <string.h>
+#include <vector>
+#include <stack>
 
 using namespace std;
 
@@ -12,12 +14,15 @@ using namespace std;
 long T;
 long S;
 long M;
+stack<long> resting;
+stack<long> active;
 
-//facility_set *drop;
-//facility_set *pick;
+facility_set *drop;
+facility_set *pick;
+mailbox load("loading");
 
 facility_set *buttons;  // customer queues at each stop
-facility rest ("rest");           // dummy facility indicating an idle shuttle
+facility_set *rest;           // dummy facility indicating an idle shuttle
 
 event get_off_now ("get_off_now");  // all customers can get off shuttle
 
@@ -33,8 +38,8 @@ long group_size();
 void passenger(long whoami);                // passenger trajectory
 string people[2] = {"arr_cust","dep_cust"}; // who was generated
 
-void shuttle();                  // trajectory of the shuttle bus consists of...
-void loop_around_airport(long & seats_used);      // ... repeated trips around airport
+void shuttle(long i);                  // trajectory of the shuttle bus consists of...
+void loop_around_airport(long & seats_used, long i, long ID);      // ... repeated trips around airport
 void load_shuttle(long whereami, long & on_board); // posssibly loading passengers
 qtable shuttle_occ("bus occupancy");  // time average of how full is the bus
 
@@ -45,15 +50,20 @@ extern "C" void sim(int argc, char* argv[])      // main process
   M = atoi(argv[3]);
   buttons = new facility_set("Curb", 2*T);
   hop_on = new event_set("board shuttle", 2*T);
-  shuttle_called = new event_set("call button", 2*T);
-  //drop = new facility_set("pickup", 2*T);
-  //pick = new facility_set("dropoff", 2*T);
+  shuttle_called = new event_set("call button", T+1);
+  drop = new facility_set("pickup", T+1);
+  pick = new facility_set("dropoff", T+1);
+  rest = new facility_set("rest", S);
 
   create("sim");
   shuttle_occ.add_histogram(NUM_SEATS+1,0,NUM_SEATS);
   make_passengers(TERMNL);  // generate a stream of arriving customers
   make_passengers(CARLOT);  // generate a stream of departing customers
-  shuttle();                // create a single shuttle
+  for(long i = 0; i < S; ++i) 
+  {                         // create a single shuttle
+    resting.push(i);
+    shuttle(i);
+  }
   hold (1440);              // wait for a whole day (in minutes) to pass
   report();
   status_facilities();
@@ -68,7 +78,7 @@ void make_passengers(long whereami)
 
   while(clock < 1440.)          // run for one day (in minutes)
   {
-    hold(expntl(10));           // exponential interarrivals, mean 10 minutes
+    hold(expntl(M/T));           // exponential interarrivals, mean M
     long group = group_size();
     for (long i=0;i<group;i++)  // create each member of the group
       passenger(whereami);      // new passenger appears at this location
@@ -82,48 +92,56 @@ void passenger(long whoami)
   const char* myName=people[whoami].c_str(); // hack because CSIM wants a char*
   create(myName);
 
+  load.receive(&whoami);
   (*buttons)[whoami].reserve();     // join the queue at my starting location
   (*shuttle_called)[whoami].set();  // head of queue, so call shuttle
   (*hop_on)[whoami].queue();        // wait for shuttle and invitation to board
   (*shuttle_called)[whoami].clear();// cancel my call; next in line will push 
+  
   hold(uniform(0.5,1.0));        // takes time to get seated
   boarded.set();                 // tell driver you are in your seat
   (*buttons)[whoami].release();     // let next person (if any) access button
-  if(whoami == 0)
-    get_off_now.wait();          // everybody off when shuttle reaches next stop
+  get_off_now.wait();          // everybody off when shuttle reaches next stop
 
 }
 
 // Model segment 3: the shuttle bus
 
-bool isNeeded() {
-  for(int i = 0; i < 2*T; ++i) {
+int isNeeded() {
+  for(long i = 0; i < 2*T; ++i) {
     if((*shuttle_called)[i].state() == OCC)
-	return 1;
+	return i;
   }
-  return 0;
+  return -1;
 }
 
-void shuttle() {
-  //for(int i = 0; i < S; ++i)
+void shuttle(long i) {
     create ("shuttle");
-  
+    (*rest)[i].reserve(); 
     while(1) {  // loop forever
-    // start off in idle state, waiting for the first call...
-    rest.reserve();                   // relax at garage till called from somewhere
-    long who_pushed = (*shuttle_called).wait_any();
-    (*shuttle_called)[who_pushed].set(); // loop exit needs to see event
-    rest.release();                   // and back to work we go!
+      // start off in idle state, waiting for the first call...
+      // relax at garage till called from somewhere
+      long top = resting.top();
+      (*rest)[top].reserve();
+      (*shuttle_called)[top].wait();
+      (*shuttle_called)[top].set(); // loop exit needs to see event
+      (*rest)[top].release();                   // and back to work we go!
+      
 
-    long seats_used = 0;              // shuttle is initially empty
-    shuttle_occ.note_value(seats_used);
+      long seats_used = 0;              // shuttle is initially empty
+      shuttle_occ.note_value(seats_used);
+      
+      active.push(top);
+      resting.pop();
 
-    hold(2);  // 2 minutes to reach car lot stop
+      hold(2);  // 2 minutes to reach car lot stop
 
-    // Keep going around the loop until there are no calls waiting
-    while (isNeeded())
-      loop_around_airport(seats_used);
-  }
+      // Keep going around the loop until there are no calls waiting
+      while (isNeeded() != -1) {
+        load.send(i);
+        loop_around_airport(seats_used, isNeeded(), top);
+      }
+    }
 }
 
 long group_size() {  // calculates the number of passengers in a group
@@ -135,32 +153,43 @@ long group_size() {  // calculates the number of passengers in a group
   }
 }
 
-void loop_around_airport(long & seats_used) { // one trip around the airport
+void loop_around_airport(long & seats_used, long i, long ID) { // one trip around the airport
   // Start by picking up departing passengers at car lot
-  load_shuttle(CARLOT, seats_used);
-  shuttle_occ.note_value(seats_used);
-
-  hold (uniform(3,5));  // drive to airport terminal
-
-  // drop off all departing passengers at airport terminal
-  if(seats_used > 0) {
-    get_off_now.set(); // open door and let them off
-    seats_used = 0;
+    (*pick)[i].reserve();
+    load_shuttle(CARLOT, seats_used);
+    (*pick)[i].release();
     shuttle_occ.note_value(seats_used);
-  }
 
-  // pick up arriving passengers at airport terminal
-  load_shuttle(TERMNL, seats_used);
-  shuttle_occ.note_value(seats_used);
+    hold (uniform(3,5));  // drive to airport terminal
 
-  hold (uniform(3,5));  // drive to Hertz car lot
+    // drop off all departing passengers at airport terminal
+    if(seats_used > 0) {
+      (*drop)[i].reserve();
+      get_off_now.set(); // open door and let them off
+      seats_used = 0;
+      (*drop)[i].release();
+      shuttle_occ.note_value(seats_used);
+    }
 
-  // drop off all arriving passengers at car lot
-  if(seats_used > 0) {
-    get_off_now.set(); // open door and let them off
-    seats_used = 0;
+    // pick up arriving passengers at airport terminal
+    (*pick)[i].reserve();
+    load_shuttle(TERMNL, seats_used);
+    (*pick)[i].release();
     shuttle_occ.note_value(seats_used);
-  }
+
+    hold (uniform(3,5));  // drive to Hertz car lot
+ 
+    // drop off all arriving passengers at car lot
+    if(seats_used > 0) {
+      (*drop)[i].reserve();
+      get_off_now.set(); // open door and let them off
+      seats_used = 0;
+      (*drop)[i].release();
+      shuttle_occ.note_value(seats_used);
+    }
+  active.pop();
+  resting.push(ID);
+  (*rest)[ID].reserve();
   // Back to starting point. Bus is empty. Maybe I can rest...
 }
 
